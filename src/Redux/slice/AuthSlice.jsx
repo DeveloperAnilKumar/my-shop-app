@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 export const sendOTP = createAsyncThunk("/send-otp", async (email) => {
     try {
-        const res = await axios.post(BASE_URL + "/send-otp", email)
+        const res = await axios.post(BASE_URL + "/auth/send-otp", email)
         console.log(res.data)
         return await res.data
     } catch (error) {
@@ -22,7 +22,7 @@ export const sendOTP = createAsyncThunk("/send-otp", async (email) => {
 export const signup = createAsyncThunk("/signup", async (data) => {
 
     try {
-        const res = await axios.post(BASE_URL + "/signup", data)
+        const res = await axios.post(BASE_URL + "/auth/signup", data)
         console.log(res)
         return await res.data
     } catch (error) {
@@ -34,7 +34,7 @@ export const signup = createAsyncThunk("/signup", async (data) => {
 export const login = createAsyncThunk("/login", async (data) => {
 
     try {
-        const res = await axios.post(BASE_URL + "/login", data)
+        const res = await axios.post(BASE_URL + "/auth/login", data)
         return res.data
     } catch (error) {
         toast.error(error.response.data.message)
@@ -46,7 +46,7 @@ export const login = createAsyncThunk("/login", async (data) => {
 export const logout = createAsyncThunk("/logout", async () => {
 
     try {
-        const res = await axios.post(BASE_URL + "/logout")
+        const res = await axios.post(BASE_URL + "/auth/logout")
         return await res.data
     } catch (error) {
         toast.error(error.response.data.message)
@@ -56,7 +56,7 @@ export const logout = createAsyncThunk("/logout", async () => {
 export const sendResetToken = createAsyncThunk("/send-token", async (email) => {
 
     try {
-        const res = await axios.post(BASE_URL + "/send-token", email)
+        const res = await axios.post(BASE_URL + "/auth/send-token", email)
         return await res.data
     } catch (error) {
         toast.error(error.response.data.message)
@@ -66,7 +66,7 @@ export const sendResetToken = createAsyncThunk("/send-token", async (email) => {
 
 export const resetPassword = createAsyncThunk("/reset-password", async (data) => {
     try {
-        const res = await axios.post(BASE_URL + "/reset-password" , data)
+        const res = await axios.post(BASE_URL + "/auth/reset-password" , data)
         console.log(res)
         return await res.data
     } catch (error) {

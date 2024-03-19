@@ -65,6 +65,7 @@ export default function Navbar() {
           }}
         >
           <div>
+            <Link to="/">
             <Typography
               variant="h6"
               component="div"
@@ -80,6 +81,7 @@ export default function Navbar() {
 
               <SiShopify className="text-2xl" />
             </Typography>
+            </Link>
           </div>
 
           <div className=" w-full my-1  sm:w-1/2 flex-wrap gap-0.5 items-center   justify-center sm:justify-end  ">
@@ -117,9 +119,15 @@ export default function Navbar() {
               </Typography>
               <Typography>
                 <Link to="/cart">
-                  <Badge badgeContent={cartItems.length} color="secondary">
-                    <BsCart className="text-2xl" />
-                  </Badge>
+                  {cartItems.length === 0 ? (
+                    <Badge badgeContent={"0"} color="secondary">
+                      <BsCart className="text-2xl" />{" "}
+                    </Badge>
+                  ) : (
+                    <Badge badgeContent={cartItems.length} color="secondary">
+                      <BsCart className="text-2xl" />
+                    </Badge>
+                  )}
                 </Link>
               </Typography>
               <Tooltip title="Account settings">
@@ -188,13 +196,12 @@ export default function Navbar() {
 
               {isLogin && (
                 <Link to="/my-orders">
-              
-                <MenuItem onClick={handleClose}>
-                  <ListItemIcon>
-                    <LuBox fontSize="small" />
-                  </ListItemIcon>
-                  My Orders
-                </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                      <LuBox fontSize="small" />
+                    </ListItemIcon>
+                    My Orders
+                  </MenuItem>
                 </Link>
               )}
 

@@ -19,6 +19,7 @@ import CategoryByProducts from "./component/CategoryByProducts.jsx";
 import CheckOut from "./component/CheckOut.jsx";
 import OrderConformation from "./component/OrderConformation.jsx";
 import MyOrder from "./component/MyOrder.jsx";
+import OrderDetails from "./component/OrderDetails.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -54,20 +55,16 @@ function App() {
             />
           )}
 
-          {loading ? (
-            <Route path="/cart" element={<Spinner />} />
-          ) : (
-            <Route path="/cart" element={<Cart cartItems={cartItems} />} />
-          )}
+          <Route path="/cart" element={<Cart cartItems={cartItems} />} />
 
           <Route path="/view/:id" element={<ProductView />} />
 
           <Route path="/category/:id" element={<CategoryByProducts />} />
 
           <Route path="/order" element={<CheckOut />} />
-          <Route path="/cod/:id" element={<OrderConformation/>} />
-          <Route path="/my-orders" element={<MyOrder/>} />
-
+          <Route path="/cod/:id" element={<OrderConformation />} />
+          <Route path="/my-orders" element={<MyOrder />} />
+          <Route path="/order/:id" element={<OrderDetails />} />
         </Routes>
       </div>
     </>

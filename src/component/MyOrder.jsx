@@ -3,14 +3,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { BASE_URL } from "./data";
 import {Button} from "@mui/material";
+import { Link } from "react-router-dom";
 
 function MyOrder() {
   const [orders, setOrders] = useState([]);
 
+
+
   const getAllOrders = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
-      const res = await axios.get(BASE_URL + "/all-orders", {
+      const res = await axios.get(BASE_URL + "/order/all", {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -21,6 +24,12 @@ function MyOrder() {
       console.error("Error fetching orders:", error);
     }
   };
+
+
+
+
+  
+
 
   useEffect(() => {
     getAllOrders();
@@ -89,7 +98,9 @@ function MyOrder() {
                             </h4>
                            
                            <div className="flex gap-3 ">
-                           <Button  variant="contained" size="small">View Order</Button>
+                          <Link to={`/order/${item._id}`}>
+                          <Button  variant="contained" size="small">View Order</Button>
+                          </Link> 
                             <Button variant="contained" sx={{
                              
                             }} size="small">Cancel Order</Button>

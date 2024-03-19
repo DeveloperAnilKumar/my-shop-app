@@ -36,7 +36,7 @@ function CategoryByProducts() {
 
             {
 
-                product.length ===0?(<div>not item </div>):(
+                product?.length ===0 || product===null ?(<div>not item </div>):(
                     product.map((p)=>
                     
                     <ProductCard  key={p._id} products={p}  />

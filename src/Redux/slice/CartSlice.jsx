@@ -7,7 +7,7 @@ export const addToCart = createAsyncThunk("/add-to-cart", async (data) => {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const res = await axios.post(BASE_URL + "/add-to-cart", data, {
+    const res = await axios.post(BASE_URL + "/cart", data, {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
@@ -23,7 +23,7 @@ export const removeCartItems = createAsyncThunk("/remove-cart", async () => {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const res = await axios.delete(BASE_URL + "/remove-cart", {
+    const res = await axios.delete(BASE_URL + "/cart", {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
@@ -39,7 +39,7 @@ export const getAllCartItems = createAsyncThunk("/cart-items", async () => {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const res = await axios.get(BASE_URL + "/cart-items", {
+    const res = await axios.get(BASE_URL + "/cart", {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
@@ -59,7 +59,7 @@ export const incrementQuantity = createAsyncThunk(
 
       console.log(data);
 
-      const res = await axios.put(BASE_URL + "/update-cart", data, {
+      const res = await axios.put(BASE_URL + "/cart", data, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -78,7 +78,7 @@ export const decrementQuantity = createAsyncThunk(
     try {
       const user = JSON.parse(localStorage.getItem("user"));
 
-      const res = await axios.put(BASE_URL + "/update-cart", data, {
+      const res = await axios.put(BASE_URL + "/cart", data, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -96,7 +96,7 @@ export const removeAllCartItems = createAsyncThunk("/remove-all", async () => {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
     const res = await axios.post(
-      BASE_URL + "/remove-all-cart",
+      BASE_URL + "/cart/remove",
       {},
       {
         headers: {
@@ -140,7 +140,7 @@ export const CartSlice = createSlice({
 
       .addCase(getAllCartItems.fulfilled, (state, action) => {
         state.loading = false;
-        state.cartItems = [...action.payload.updatedCartItem];
+        state.cartItems = [...action.payload.updatedCartItem] ;
       })
 
       .addCase(incrementQuantity.fulfilled, (state, action) => {

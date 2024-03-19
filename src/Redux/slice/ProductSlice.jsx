@@ -9,7 +9,7 @@ import {BASE_URL} from "../../component/data.jsx";
 
 export  const  getAllProductsData = createAsyncThunk("/get-all-products",async ()=>{
     try {
-        const  res = await  axios.get(BASE_URL+"/get-all-products" ,)
+        const  res = await  axios.get(BASE_URL+"/product" ,)
         return  await res.data
     }catch (error) {
         toast.error(error.response.data.message)

@@ -13,7 +13,7 @@ export default function ProductView() {
 
    async function getProductDetails(){
 
-    const res = await axios.get(BASE_URL+"/get-product/"+id)
+    const res = await axios.get(BASE_URL+"/product/"+id)
     setProduct(res.data.product);
 
    }

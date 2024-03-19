@@ -28,7 +28,7 @@ function OrderConformation() {
     if (captcha === randomNumber.toString()) {
       const user = JSON.parse(localStorage.getItem("user"));
       const res = await axios.post(
-        BASE_URL + "/conformOrder/" + id,
+        BASE_URL + "/order/" + id,
         {},
         {
           headers: {

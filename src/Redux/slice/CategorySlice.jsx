@@ -7,8 +7,10 @@ import {BASE_URL} from "../../component/data.jsx";
 export const getAllCategory = createAsyncThunk("/all/category", async () => {
 
     try {
-        const res = await axios.get(BASE_URL + "/get-all-category")
+        const res = await axios.get(BASE_URL + "/category")
+     
         return await res.data
+      
     } catch (error) {
         toast.error(error.response.data.message)
     }
