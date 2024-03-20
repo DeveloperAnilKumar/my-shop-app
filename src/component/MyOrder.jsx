@@ -2,13 +2,11 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { BASE_URL } from "./data";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
 function MyOrder() {
   const [orders, setOrders] = useState([]);
-
-
 
   const getAllOrders = async () => {
     try {
@@ -18,18 +16,12 @@ function MyOrder() {
           Authorization: `Bearer ${user.token}`,
         },
       });
- 
+
       setOrders(res.data.order);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
   };
-
-
-
-
-  
-
 
   useEffect(() => {
     getAllOrders();
@@ -42,16 +34,23 @@ function MyOrder() {
             {orders.map((item) => (
               <div key={item._id} className=" shadow-lg p-5 m-2">
                 <div className="flex justify-between  bg-slate-400">
-                <div className="flex flex-col p-1 text-white">
-                  <h1>orderId : {item._id}</h1>
-                  <h1>orderDate</h1>
-                </div>
-                <div className="flex flex-col  p-1 text-white">
-                 <h1> Total Amount : {new Intl.NumberFormat("en-IN", {
-                      style: "currency",
-                      currency: "INR",
-                    }).format(item.totalAmount)}</h1>
-                </div>
+                  <div className="flex flex-col p-1 text-white">
+                    <h1>orderId : {item._id}</h1>
+                    <h1>
+                      orderDate :
+                      {new Date(item.orderDate).toLocaleDateString("en-GB")}
+                    </h1>
+                  </div>
+                  <div className="flex flex-col  p-1 text-white">
+                    <h1>
+                      {" "}
+                      Total Amount :{" "}
+                      {new Intl.NumberFormat("en-IN", {
+                        style: "currency",
+                        currency: "INR",
+                      }).format(item.totalAmount)}
+                    </h1>
+                  </div>
                 </div>
 
                 {item.items.map((p) => {
@@ -82,10 +81,11 @@ function MyOrder() {
                         </div>
                         <div className="md:ml-auto md:text-right">
                           <div className="flex md:justify-end lg:justify-end">
-                            Amount :   {new Intl.NumberFormat("en-IN", {
-                      style: "currency",
-                      currency: "INR",
-                    }).format(p.price)}
+                            Amount :{" "}
+                            {new Intl.NumberFormat("en-IN", {
+                              style: "currency",
+                              currency: "INR",
+                            }).format(p.price)}
                           </div>
                           <div className="mt-6">
                             <h4 className="text-lg font-bold text-[#333]">
@@ -94,18 +94,19 @@ function MyOrder() {
                               </span>
                             </h4>
                             <h4 className="text-lg font-bold text-[#333] mt-2">
-                            Your order is in transit
+                              Your order is in transit
                             </h4>
-                           
-                           <div className="flex gap-3 ">
-                          <Link to={`/order/${item._id}`}>
-                          <Button  variant="contained" size="small">View Order</Button>
-                          </Link> 
-                            <Button variant="contained" sx={{
-                             
-                            }} size="small">Cancel Order</Button>
-                           </div>
-                          
+
+                            <div className="flex gap-3 ">
+                              <Link to={`/order/${item._id}`}>
+                                <Button variant="contained" size="small">
+                                  View Order
+                                </Button>
+                              </Link>
+                              <Button variant="contained" sx={{}} size="small">
+                                Cancel Order
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </div>

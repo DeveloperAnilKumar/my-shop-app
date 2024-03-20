@@ -357,6 +357,8 @@ function CheckOut() {
                   >
                     Complete Purchase
                   </button>
+
+                  
                 </div>
               </div>
             </form>
