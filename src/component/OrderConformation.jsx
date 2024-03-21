@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button,  TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { BiRefresh } from "react-icons/bi";
 import axios from "axios";
 import { BASE_URL } from "./data";
@@ -38,7 +38,7 @@ function OrderConformation() {
       );
 
       if (res.data.success === true) {
-        toast.success("payment successfully");
+        toast.success("order successfully");
         navigate("/");
       }
     } else {

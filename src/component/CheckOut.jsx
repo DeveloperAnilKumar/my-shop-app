@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useSelector , useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL } from "./data";
 import { useNavigate } from "react-router-dom";
 import { removeAllCartItems } from "../Redux/slice/CartSlice";
+import toast from "react-hot-toast";
 
 function CheckOut() {
   const [address, setAddress] = useState({
@@ -23,8 +24,7 @@ function CheckOut() {
 
   const navigate = useNavigate();
 
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   function calculateTotalAmount() {
     return cartItems.reduce(
@@ -64,11 +64,74 @@ function CheckOut() {
     });
 
     if (paymentMethod === "cash") {
-    
-      await dispatch(removeAllCartItems())
-     
-    
+      await dispatch(removeAllCartItems());
       navigate("/cod/" + response.data.order._id);
+    } else {
+      const orderId = {
+        orderId: response.data.order._id,
+      };
+
+      const paymentResponse = await axios.post(BASE_URL + "/payment", orderId, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      console.log(paymentResponse);
+
+      var options = {
+        key: "rzp_test_8gm05gh8gaDVho", // Enter the Key ID generated from the Dashboard
+        amount: paymentResponse.data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        currency: paymentResponse.data.currency,
+        name: "Acme Corp", //your business name
+        description: "Test Transaction",
+        image: "https://example.com/your_logo",
+        order_id: paymentResponse.data.orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        handler: async function (response) {
+          const body = {
+            ...response,
+          };
+
+          try {
+            const verifying = await axios.post(
+              `${BASE_URL}/payment/verifySignature`,
+              body,
+              {
+                headers: {
+                  Authorization: `Bearer ${user.token}`,
+                },
+              }
+            );
+            console.log(verifying.data);
+          } catch (error) {
+            toast.error("Error verifying payment signature:", error);
+            throw error;
+          }
+        },
+        prefill: {
+          name: "prajapati computers",
+          email: "prajapaticomputersisweali@gamil.com",
+          contact: "9000000000",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      var rzp1 = new window.Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+      });
+      rzp1.open();
+      e.preventDefault();
     }
   }
 
@@ -357,8 +420,6 @@ function CheckOut() {
                   >
                     Complete Purchase
                   </button>
-
-                  
                 </div>
               </div>
             </form>
