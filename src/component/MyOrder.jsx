@@ -68,7 +68,7 @@ function MyOrder() {
                       <div className="flex items-start  gap-6 max-md:flex-col w-full">
                         <div>
                           <h3 className="text-xl font-extrabold text-[#333] mb-6">
-                            Gray T-Shirt
+                            {p.name}
                           </h3>
                           <div>
                             <h6 className="text-md text-gray-500">
