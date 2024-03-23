@@ -24,7 +24,12 @@ function MyOrder() {
   };
 
   useEffect(() => {
-    getAllOrders();
+    const timeOut = setTimeout(() => {
+      getAllOrders();
+    }, 1000);
+    return () => {
+      clearTimeout(timeOut);
+    };
   }, []);
   return (
     <div>

@@ -39,10 +39,10 @@ const navigate = useNavigate();
         <div className="p-4 mx-auto lg:max-w-7xl sm:max-w-full">
           <h2 className="text-4xl font-extrabold text-gray-800 mb-12"></h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product) => {
+            {products?.map((product) => {
               return (
                 <div
-                  key={product._id}
+                  key={product?._id}
                   className="bg-gray-50 shadow-md overflow-hidden rounded cursor-pointer hover:-translate-y-2 transition-all relative"
                 >
                   <div className="bg-white w-10 h-10 flex items-center justify-center rounded-full cursor-pointer absolute top-3 right-3">
@@ -59,28 +59,28 @@ const navigate = useNavigate();
                     </svg>
                   </div>
 
-                  <Link to={`/view/${product._id}`}>
+                  <Link to={`/view/${product?._id}`}>
                     <div className="w-11/12 h-[220px] p-4 overflow-hidden mx-auto aspect-w-16 aspect-h-8 md:mb-2 mb-4">
                       <img
-                        src={product.image}
-                        alt={product.name}
+                        src={product?.image}
+                        alt={product?.name}
                         className="h-full w-full object-contain"
                       />
                     </div>
                   </Link>
                   <div className="p-6 bg-white">
                     <h3 className="text-lg font-bold text-gray-800">
-                      {product.name}
+                      {product?.name}
                     </h3>
                     <h4 className="text-lg text-gray-700 font-bold mt-2">
                       {new Intl.NumberFormat("en-IN", {
                         style: "currency",
                         currency: "INR",
-                      }).format(product.price)}
+                      }).format(product?.price)}
                     </h4>
 
                     <p className="text-gray-500 text-sm mt-2">
-                      {product.description}
+                      {product?.description}
                     </p>
                     <div className="flex space-x-2 mt-4">
                       <svg
@@ -128,7 +128,7 @@ const navigate = useNavigate();
                     <div className="mt-3">
                       {cartItems.some((p) => p.product._id === product._id) ? (
                         <Button
-                          onClick={(e) => removeToCartHandler(e, product._id)}
+                          onClick={(e) => removeToCartHandler(e, product?._id)}
                           color="error"
                           variant="contained"
                           className="w-full "

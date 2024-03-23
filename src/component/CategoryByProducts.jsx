@@ -1,55 +1,38 @@
-import React, { useEffect, useState } from 'react'
-import {useParams} from 'react-router-dom'
-import {useDispatch , useSelector} from "react-redux";
-import  axios  from 'axios';
-import { BASE_URL } from './data.jsx';
-import ProductCard from './ProductCard.jsx';
-
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "./data.jsx";
+import ProductCard from "./ProductCard.jsx";
 
 function CategoryByProducts() {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const [product, setProduct] = useState([]);
 
-    const  {id} = useParams()
-
-    const dispatch = useDispatch()
-
-    const [product, setProduct] = useState([])
-
-
-
-    async function getProductsByCategory(){
-        const res = await  axios.get(BASE_URL+"/product/"+id)
-        setProduct(res.data.product);
+  async function getProductsByCategory() {
+    try {
+      const res = await axios.get(BASE_URL + "/product/category/" + id);
+      setProduct(res.data.product);
+    } catch (error) {
+      console.error("Error fetching products by category:", error);
+      // Handle the error (e.g., display an error message to the user)
     }
+  }
 
-    useEffect(()=>{
-        getProductsByCategory()
-    },[id])
-
-
-
-
-
-
+  useEffect(() => {
+    getProductsByCategory();
+  }, []);
 
   return (
     <div>
-
-            {
-
-                product?.length ===0 || product===null ?(<div>not item </div>):(
-                    product.map((p)=>
-                    
-                    <ProductCard  key={p._id} products={p}  />
-
-
-                    )
-                )
-
-            }
-
-
+      {product && product.length > 0 ? (
+        <ProductCard products={product} />
+      ) : (
+        <div>No items found</div>
+      )}
     </div>
-  )
+  );
 }
 
-export default CategoryByProducts
+export default CategoryByProducts;

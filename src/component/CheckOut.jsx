@@ -478,7 +478,6 @@ function CheckOut() {
         </div>
       )}
     </>
-   
   );
 }
 
