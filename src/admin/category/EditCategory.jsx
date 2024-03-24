@@ -12,6 +12,7 @@ export default function EditCategory() {
 
   const [title, setTitle] = useState({ title: "" });
 
+  
   async function submitHandler(e) {
     e.preventDefault();
     try {

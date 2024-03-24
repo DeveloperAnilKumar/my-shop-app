@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import {
   Button,
@@ -45,6 +45,12 @@ export default function ViewProduct() {
     };
   }, []);
 
+  const navigate = useNavigate();
+
+  function handleEditProduct(id) {
+    navigate(`/dashboard/edit/${id}`);
+  }
+
   return (
     <div className="container-md">
       <TableContainer>
@@ -59,7 +65,7 @@ export default function ViewProduct() {
               <TableCell>Description</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Image</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell colSpan={2}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -78,7 +84,7 @@ export default function ViewProduct() {
                   <TableCell>{product.size}</TableCell>
                   <TableCell>{product.price}</TableCell>
                   <TableCell>{product.description}</TableCell>
-                  <TableCell></TableCell>
+                  <TableCell> {product.category.title} </TableCell>
                   <TableCell>
                     <div
                       style={{
@@ -99,9 +105,9 @@ export default function ViewProduct() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Link to={`/edit/${product._id}`}>
+                    <Button onClick={() => handleEditProduct(product._id)}>
                       <AiFillEdit className="text-blue-600 cursor-pointer" />
-                    </Link>
+                    </Button>
                   </TableCell>
                   <TableCell>
                     <Button

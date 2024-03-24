@@ -2,7 +2,8 @@ import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { addToCart, removeCartItems } from "../Redux/slice/CartSlice.jsx";
-import { Link , useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Pagination from "@mui/material/Pagination";
 
 export default function ProductCard({ products }) {
   const dispatch = useDispatch();
@@ -10,20 +11,17 @@ export default function ProductCard({ products }) {
   const { cartItems } = useSelector((state) => state.cart);
   const { isLogin } = useSelector((state) => state.auth);
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   async function addToCartHandler(e, cartItem) {
-
-    
-    if(isLogin){
-        const res = await dispatch(addToCart(cartItem));
-        if (res.payload?.success === true) {
-          toast.success("product added successfully");
-        }
-    }else{
-        navigate("/login")
+    if (isLogin) {
+      const res = await dispatch(addToCart(cartItem));
+      if (res.payload?.success === true) {
+        toast.success("product added successfully");
+      }
+    } else {
+      navigate("/login");
     }
-   
   }
 
   async function removeToCartHandler(e, id) {

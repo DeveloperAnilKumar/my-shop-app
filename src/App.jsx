@@ -1,6 +1,5 @@
-import Navbar from "./component/Navbar.jsx";
 import Home from "./component/Home.jsx";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import SendOTP from "./Auth/SendOTP.jsx";
 import SignupForm from "./Auth/SignupForm.jsx";
 import LoginForm from "./Auth/LoginForm.jsx";
@@ -24,12 +23,12 @@ import Dashboard from "./admin/Dashboard.jsx";
 import AddProduct from "./admin/product/AddProduct.jsx";
 import EditProduct from "./admin/product/EditProduct.jsx";
 import ViewProduct from "./admin/product/ViewProduct.jsx";
-import AddCategory  from './admin/category/AddCategory.jsx'
-import EditCategory  from './admin/category/EditCategory.jsx'
-import ViewCategory  from './admin/category/ViewCategory.jsx'
-
-
-
+import AddCategory from "./admin/category/AddCategory.jsx";
+import EditCategory from "./admin/category/EditCategory.jsx";
+import ViewCategory from "./admin/category/ViewCategory.jsx";
+import Main from "./admin/Main.jsx";
+import Navbar from "./component/Navbar.jsx";
+import ReceivedOrders from "./admin/orders/ReceivedOrders.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -49,15 +48,16 @@ function App() {
     };
   }, [dispatch]);
 
-  const { products } = useSelector((state) => state.product);
+  const { products, currentPage, totalPages, totalProducts } = useSelector(
+    (state) => state.product
+  );
   const { cartItems } = useSelector((state) => state.cart);
   const { category } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.auth);
 
   return (
     <>
-      <Navbar />
-
+      {user.role !== "ADMIN" && <Navbar />}
       <div>
         <Routes>
           <Route path="/" element={<Home category={category} />} />
@@ -71,7 +71,7 @@ function App() {
           ) : (
             <Route
               path="/product"
-              element={<ProductCard products={products} />}
+              element={<ProductCard products={products} currentPage={currentPage} totalPages={totalPages}  totalProducts={totalProducts}  />}
             />
           )}
           {<Route path="/cart" element={<Cart cartItems={cartItems} />} />}
@@ -81,13 +81,21 @@ function App() {
           <Route path="/cod/:id" element={<OrderConformation />} />
           <Route path="/my-orders" element={<MyOrder />} />
           <Route path="/order/:id" element={<OrderDetails />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/add" element={<AddProduct />} />
-          <Route path="/edit/:id" element={<EditProduct />} />
-          <Route path="/view" element={<ViewProduct />} />
-          <Route path="/add/category" element={<AddCategory />} />
-          <Route path="/edit/category/:id" element={<EditCategory />} />
-          <Route path="/view/category" element={<ViewCategory />} />
+
+          {user.role === "ADMIN" ? (
+            <Route path="dashboard/*" element={<Main />}>
+              <Route index element={<Dashboard />} />
+              <Route path="add" element={<AddProduct />} />
+              <Route path="edit/:id" element={<EditProduct />} />
+              <Route path="view" element={<ViewProduct />} />
+              <Route path="add/category" element={<AddCategory />} />
+              <Route path="edit/category/:id" element={<EditCategory />} />
+              <Route path="view/category" element={<ViewCategory />} />
+              <Route path="orders" element={<ReceivedOrders />} />
+            </Route>
+          ) : (
+            <Route path="/" element={<Home />}></Route>
+          )}
         </Routes>
       </div>
     </>

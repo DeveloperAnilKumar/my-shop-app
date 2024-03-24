@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import {
   Table,
@@ -26,7 +26,10 @@ export default function ViewCategory() {
       console.log(error);
     }
   }
-
+  const navigate = useNavigate();
+  function handleEditCategory(id) {
+    navigate(`/dashboard/edit/category/${id}`);
+  }
   return (
     <div className="container mx-auto py-8">
       <TableContainer component={Paper}>
@@ -54,17 +57,16 @@ export default function ViewCategory() {
                   <TableCell className="px-4 py-2">{index + 1}</TableCell>
                   <TableCell className="px-4 py-2">{category.title}</TableCell>
                   <TableCell className="px-4 py-2">
-                    <Link to={`/edit/category/${category._id}`}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        startIcon={<AiFillEdit />}
-                        style={{ marginRight: "8px" }}
-                      >
-                        Edit
-                      </Button>
-                    </Link>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      startIcon={<AiFillEdit />}
+                      style={{ marginRight: "8px" }}
+                      onClick={() => handleEditCategory(category._id)}
+                    >
+                      Edit
+                    </Button>
                     <Button
                       variant="contained"
                       color="secondary"
