@@ -1,17 +1,65 @@
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Cards from "./Cards.jsx";
-import { data } from "./data.jsx";
+import { BASE_URL, data } from "./data.jsx";
 import { Link } from "react-router-dom";
+
+import { useSelector } from "react-redux";
+import axios from "axios";
+
 export default function Home({ category }) {
+  const [product, setProduct] = useState([]);
+  const [womanProduct, setWomanProduct] = useState([]);
+  const [kisProduct, setKidProduct] = useState([]);
+
+  const { products, currentPage, totalPages, totalProducts } = useSelector(
+    (state) => state.product
+  );
+
+  async function getWomanProduct() {
+    try {
+      const res = await axios.get(
+        BASE_URL + "/product/category/6600fc9940dfd2db2cb0fadb"
+      );
+      setWomanProduct(res.data.product.slice(0, 6));
+    } catch (error) {
+      console.error("Error fetching products by category:", error);
+    }
+  }
+
+  async function getKidProduct() {
+    try {
+      const res = await axios.get(
+        BASE_URL + "/product/category/6600fca340dfd2db2cb0fadd"
+      );
+      setKidProduct(res.data.product.slice(0, 6));
+    } catch (error) {
+      console.error("Error fetching products by category:", error);
+    }
+  }
+
+  async function getMenProducts() {
+    try {
+      const res = await axios.get(
+        BASE_URL + "/product/category/6600fc7540dfd2db2cb0fad9"
+      );
+      setProduct(res.data.product.slice(0, 6));
+    } catch (error) {
+      console.error("Error fetching products by category:", error);
+    }
+  }
+
   useEffect(() => {
     AOS.init();
     AOS.refresh();
+
+    getMenProducts();
+    getWomanProduct();
+    getKidProduct();
   }, []);
   return (
     <div>
-     
       <div className="relative   font-[sans-serif] m-1 before:absolute before:w-full before:h-full before:inset-0 before:bg-black before:opacity-50 before:z-10">
         <img
           src="https://cdn.vectorstock.com/i/1000x1000/80/69/shopping-and-buying-concept-store-interior-vector-46928069.webp"
@@ -135,11 +183,19 @@ export default function Home({ category }) {
         </div>
       </div>
 
-      <Cards proudcts={data} category={"MEN'S WEAR"} />
+      <Cards data={"fade-right"} products={product} category={"MEN'S WEAR"} />
 
-      <Cards proudcts={data} category={"WOMEN'S WEAR"} />
+      <Cards
+        data={"fade-up-left"}
+        products={womanProduct}
+        category={"WOMEN'S WEAR"}
+      />
 
-      <Cards proudcts={data} category={"KID'S WEAR"} />
+      <Cards
+        data={"fade-right"}
+        products={kisProduct}
+        category={"KID'S WEAR"}
+      />
     </div>
   );
 }

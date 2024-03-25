@@ -8,6 +8,7 @@ import ProductCard from "./ProductCard.jsx";
 function CategoryByProducts() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  
   const [product, setProduct] = useState([]);
 
   async function getProductsByCategory() {
@@ -16,7 +17,6 @@ function CategoryByProducts() {
       setProduct(res.data.product);
     } catch (error) {
       console.error("Error fetching products by category:", error);
-      // Handle the error (e.g., display an error message to the user)
     }
   }
 

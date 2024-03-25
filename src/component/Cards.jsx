@@ -1,9 +1,9 @@
 import Card from "./Card.jsx";
 
-export default function Cards({ proudcts, category }) {
+export default function Cards({ products, category , data }) {
   return (
     <div
-      data-aos="fade-right"
+      data-aos={data}
       data-aos-duration="2000"
       className="font-[sans-serif]"
     >
@@ -12,8 +12,8 @@ export default function Cards({ proudcts, category }) {
           {category}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {proudcts.map((product) => {
-            return <Card key={product.id} product={product} />;
+          {products?.map((product) => {
+            return <Card key={product._id} product={product} />;
           })}
         </div>
       </div>

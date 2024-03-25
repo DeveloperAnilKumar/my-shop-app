@@ -6,7 +6,7 @@ export default function Card({ product }) {
       <div className="bg-white rounded-md overflow-hidden shadow-md cursor-pointer hover:scale-[1.02] transition-all">
         <div className="w-full aspect-w-16 aspect-h-8 lg:h-80">
           <img
-            src={product.imageURL}
+            src={product.image}
             alt="Product 3"
             className="h-full w-full object-cover object-top"
           />
@@ -14,7 +14,7 @@ export default function Card({ product }) {
         <div className="p-6">
           <h3 className="text-lg font-bold text-gray-800">
             {" "}
-            {product.name} | T-shirt
+            {product.name} 
           </h3>
 
           <div className="mt-4 flex items-center flex-wrap gap-2">
