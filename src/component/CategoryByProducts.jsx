@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "./data.jsx";
 import ProductCard from "./ProductCard.jsx";
+import { Spinner } from "./Spinner.jsx";
 
 function CategoryByProducts() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  
+
   const [product, setProduct] = useState([]);
 
   async function getProductsByCategory() {
@@ -28,8 +29,14 @@ function CategoryByProducts() {
     <div>
       {product && product.length > 0 ? (
         <ProductCard products={product} />
+      ) : !product.length === 0 ? (
+        <div className="flex justify-center items-center h-screen w-screen text-5xl capitalize">
+          no data found
+        </div>
       ) : (
-        <div>No items found</div>
+        <div>
+          <Spinner />
+        </div>
       )}
     </div>
   );

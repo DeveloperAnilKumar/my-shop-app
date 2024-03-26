@@ -29,6 +29,7 @@ import ViewCategory from "./admin/category/ViewCategory.jsx";
 import Main from "./admin/Main.jsx";
 import Navbar from "./component/Navbar.jsx";
 import ReceivedOrders from "./admin/orders/ReceivedOrders.jsx";
+import SearchProducts from './component/SearchProducts.jsx'
 
 function App() {
   const dispatch = useDispatch();
@@ -74,6 +75,8 @@ function App() {
               element={<ProductCard products={products} currentPage={currentPage} totalPages={totalPages}  totalProducts={totalProducts}  />}
             />
           )}
+          <Route path="/search" element={<SearchProducts />} />
+
           {<Route path="/cart" element={<Cart cartItems={cartItems} />} />}
           <Route path="/view/:id" element={<ProductView />} />
           <Route path="/category/:id" element={<CategoryByProducts />} />

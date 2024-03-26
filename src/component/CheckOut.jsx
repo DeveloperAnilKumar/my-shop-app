@@ -5,6 +5,7 @@ import { BASE_URL } from "./data";
 import { useNavigate } from "react-router-dom";
 import { removeAllCartItems } from "../Redux/slice/CartSlice";
 import toast from "react-hot-toast";
+import { Spinner } from "./Spinner";
 
 function CheckOut() {
   const [address, setAddress] = useState({
@@ -85,13 +86,13 @@ function CheckOut() {
       console.log(paymentResponse);
 
       var options = {
-        key: "rzp_test_8gm05gh8gaDVho", // Enter the Key ID generated from the Dashboard
-        amount: paymentResponse.data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        key: "rzp_test_8gm05gh8gaDVho",
+        amount: paymentResponse.data.amount,
         currency: paymentResponse.data.currency,
         name: "Acme Corp", //your business name
         description: "Test Transaction",
         image: "https://example.com/your_logo",
-        order_id: paymentResponse.data.orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        order_id: paymentResponse.data.orderId,
         handler: async function (response) {
           const body = {
             ...response,
@@ -179,7 +180,7 @@ function CheckOut() {
   return (
     <>
       {isLoading ? (
-        <div>loading...</div>
+        <Spinner />
       ) : (
         <div className="container m-auto" style={{ width: "80vw" }}>
           <div className="font-[sans-serif] bg-gray-50 m-5 ">

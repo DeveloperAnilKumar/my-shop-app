@@ -73,12 +73,12 @@ export default function Home({ category }) {
           <p className="text-lg text-center text-gray-200">
             Embark on unforgettable journeys. Book your dream vacation today!
           </p>
-          <a
-            href="#"
+          <Link
+            to="/product"
             className="mt-8 bg-transparent text-white text-base font-semibold py-2.5 px-6 border-2 border-white rounded hover:bg-white hover:text-black transition duration-300 ease-in-out"
           >
             Shop Now
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -174,12 +174,12 @@ export default function Home({ category }) {
             Elevate your style with our latest arrivals. Shop now and enjoy
             exclusive discounts!
           </p>
-          <a
-            href="#"
+          <Link
+            to="/product"
             className="bg-white text-sm text-blue-600 font-semibold py-2 px-6 rounded hover:bg-slate-100"
           >
             Shop Now
-          </a>
+          </Link>
         </div>
       </div>
 

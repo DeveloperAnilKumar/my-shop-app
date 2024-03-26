@@ -17,16 +17,22 @@ import {
 import { SiShopify } from "react-icons/si";
 import { BsCart, BsPersonFill } from "react-icons/bs";
 import { AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiHeart } from "react-icons/bi";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LuBox } from "react-icons/lu";
 import toast from "react-hot-toast";
 import { logout } from "../Redux/slice/AuthSlice.jsx";
+import axios from "axios";
+import { BASE_URL } from "./data.jsx";
+import SearchProducts from "./SearchProducts.jsx";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [search, setSearch] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,14 +44,28 @@ export default function Navbar() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
 
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const loc = location.pathname.includes("/search");
+
+  async function handleSearch(e) {
+    try {
+      const res = await axios.get(
+        BASE_URL + `/product/search/product?q=${search}`
+      );
+      setSearchResult(res.data);
+      navigate("/search");
+      setSearch("");
+    } catch (error) {
+      toast.error(error);
+    }
+  }
   async function logoutHanler(e) {
     e.preventDefault();
 
     const res = await dispatch(logout());
-
     if (res.payload?.success === true) {
       toast.success("logout successfully");
       navigate("/login");
@@ -54,7 +74,7 @@ export default function Navbar() {
 
   return (
     <>
-      {user.role == "USER"  ? (
+      {user.role == "USER" ? (
         <AppBar position="sticky">
           <Toolbar>
             <Container
@@ -90,10 +110,13 @@ export default function Navbar() {
                 <div className="flex  w-full">
                   <input
                     type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                     className=" w-full text-black outline-blue-300 px-2 rounded-l "
                   />
                   <div>
                     <Button
+                      onClick={handleSearch}
                       variant="contained"
                       sm={{
                         borderRadius: "0",
@@ -273,10 +296,14 @@ export default function Navbar() {
                 <div className="flex  w-full">
                   <input
                     type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                     className=" w-full text-black outline-blue-300 px-2 rounded-l "
                   />
                   <div>
                     <Button
+                      type="submit"
+                      onClick={handleSearch}
                       variant="contained"
                       sm={{
                         borderRadius: "0",
@@ -420,6 +447,15 @@ export default function Navbar() {
             </Container>
           </Toolbar>
         </AppBar>
+      )}
+
+      {loc && searchResult.length > 0 ? (
+        <SearchProducts products={searchResult} />
+      ) : (
+        loc &&  <div className="h-screen flex justify-center items-center flex-col">
+        <img src="undraw_empty_re_opql.svg" alt="empty" className="h-80" />
+        <p className="text-4xl capitalize">No result found</p>
+      </div>
       )}
     </>
   );
