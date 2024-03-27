@@ -27,6 +27,7 @@ import { logout } from "../Redux/slice/AuthSlice.jsx";
 import axios from "axios";
 import { BASE_URL } from "./data.jsx";
 import SearchProducts from "./SearchProducts.jsx";
+import AdminNavBar from "../admin/AdminNavBar.jsx";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -452,10 +453,12 @@ export default function Navbar() {
       {loc && searchResult.length > 0 ? (
         <SearchProducts products={searchResult} />
       ) : (
-        loc &&  <div className="h-screen flex justify-center items-center flex-col">
-        <img src="undraw_empty_re_opql.svg" alt="empty" className="h-80" />
-        <p className="text-4xl capitalize">No result found</p>
-      </div>
+        loc && (
+          <div className="h-screen flex justify-center items-center flex-col">
+            <img src="undraw_empty_re_opql.svg" alt="empty" className="h-80" />
+            <p className="text-4xl capitalize">No result found</p>
+          </div>
+        )
       )}
     </>
   );

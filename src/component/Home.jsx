@@ -22,7 +22,7 @@ export default function Home({ category }) {
       const res = await axios.get(
         BASE_URL + "/product/category/6600fc9940dfd2db2cb0fadb"
       );
-      setWomanProduct(res.data.product.slice(0, 6));
+      setWomanProduct(res.data.products.slice(0, 6));
     } catch (error) {
       console.error("Error fetching products by category:", error);
     }
@@ -33,7 +33,7 @@ export default function Home({ category }) {
       const res = await axios.get(
         BASE_URL + "/product/category/6600fca340dfd2db2cb0fadd"
       );
-      setKidProduct(res.data.product.slice(0, 6));
+      setKidProduct(res.data.products.slice(0, 6));
     } catch (error) {
       console.error("Error fetching products by category:", error);
     }
@@ -44,7 +44,7 @@ export default function Home({ category }) {
       const res = await axios.get(
         BASE_URL + "/product/category/6600fc7540dfd2db2cb0fad9"
       );
-      setProduct(res.data.product.slice(0, 6));
+      setProduct(res.data.products.slice(0, 6));
     } catch (error) {
       console.error("Error fetching products by category:", error);
     }
@@ -57,6 +57,7 @@ export default function Home({ category }) {
     getMenProducts();
     getWomanProduct();
     getKidProduct();
+  
   }, []);
   return (
     <div>

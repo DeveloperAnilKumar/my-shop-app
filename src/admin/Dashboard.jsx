@@ -42,19 +42,20 @@ function Dashboard() {
   const getAllOrders = async () => {
     try {
       const res = await axios.get(BASE_URL + "/order/all");
-      setOrders(res.data.order);
+      setOrders(res.data.orders);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
   };
 
-  function calculateTotalAmount() {
-    return orders.reduce((total, item) => total + item.totalAmount, 0);
-  }
+ 
   useEffect(() => {
     getUserCount();
     getAllOrders();
   }, []);
+  function calculateTotalAmount() {
+    return orders.reduce((total, item) => total + item?.totalAmount, 0);
+  }
 
   return (
     <div>
@@ -79,7 +80,7 @@ function Dashboard() {
                     </Typography>
                     {/* Render orders received details */}
                     <Typography variant="h4" gutterBottom>
-                      {orders.length}
+                      {orders?.length}
                     </Typography>
                   </Paper>
                 </Grid>

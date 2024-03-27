@@ -15,12 +15,19 @@ import { BASE_URL } from "../../component/data";
 import { useEffect, useState } from "react";
 
 export default function ViewProduct() {
-  const [products, setProducts] = useState([]);
+  const [productItem, setProductItem] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   async function fetchProducts() {
     try {
-      const response = await axios.get(`${BASE_URL}/product`);
-      setProducts(response.data.product);
+      const response = await axios.get(`${BASE_URL}/product`, {
+        params: {
+          page: currentPage,
+          limit: itemsPerPage,
+        },
+      });
+      setProductItem(response.data.product);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -35,20 +42,19 @@ export default function ViewProduct() {
       console.log("Error deleting product:", error);
     }
   }
-  useEffect(() => {
-    const setTi = setTimeout(() => {
-      fetchProducts();
-    }, 1000);
 
-    return () => {
-      clearTimeout(setTi);
-    };
-  }, []);
+  useEffect(() => {
+    fetchProducts();
+  }, [currentPage]);
 
   const navigate = useNavigate();
 
   function handleEditProduct(id) {
     navigate(`/dashboard/edit/${id}`);
+  }
+
+  function handlePageChange(pageNumber) {
+    setCurrentPage(pageNumber);
   }
 
   return (
@@ -69,14 +75,14 @@ export default function ViewProduct() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.length === 0 ? (
+            {productItem.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={9} align="center">
                   No data found
                 </TableCell>
               </TableRow>
             ) : (
-              products.map((product, index) => (
+              productItem.map((product, index) => (
                 <TableRow key={product._id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{product.name}</TableCell>
@@ -124,6 +130,22 @@ export default function ViewProduct() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <div style={{ marginTop: "20px", textAlign: "center" }}>
+        <Button
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Previous
+        </Button>
+        <span style={{ margin: "0 10px" }}>{currentPage}</span>
+        <Button
+          disabled={productItem.length < itemsPerPage}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 }

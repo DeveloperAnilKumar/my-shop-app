@@ -8,7 +8,7 @@ import ResetPassword from "./Auth/ResetPassword.jsx";
 import ProductCard from "./component/ProductCard.jsx";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProductsData } from "./Redux/slice/ProductSlice.jsx";
+import { getAllProductsData, setCurrentPage } from "./Redux/slice/ProductSlice.jsx";
 import { Spinner } from "./component/Spinner.jsx";
 import Cart from "./component/Cart.jsx";
 import { getAllCartItems } from "./Redux/slice/CartSlice.jsx";
@@ -29,7 +29,8 @@ import ViewCategory from "./admin/category/ViewCategory.jsx";
 import Main from "./admin/Main.jsx";
 import Navbar from "./component/Navbar.jsx";
 import ReceivedOrders from "./admin/orders/ReceivedOrders.jsx";
-import SearchProducts from './component/SearchProducts.jsx'
+import SearchProducts from "./component/SearchProducts.jsx";
+import AdminNavBar from "./admin/AdminNavBar.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,16 +38,10 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const time = setTimeout(() => {
-      dispatch(getAllProductsData());
-      dispatch(getAllCartItems());
-      dispatch(getAllCategory());
-      setLoading(false);
-    }, 1000);
-
-    return () => {
-      clearInterval(time);
-    };
+    dispatch(getAllProductsData());
+    dispatch(getAllCartItems());
+    dispatch(getAllCategory());
+    setLoading(false);
   }, [dispatch]);
 
   const { products, currentPage, totalPages, totalProducts } = useSelector(
@@ -59,6 +54,7 @@ function App() {
   return (
     <>
       {user.role !== "ADMIN" && <Navbar />}
+     
       <div>
         <Routes>
           <Route path="/" element={<Home category={category} />} />
@@ -72,7 +68,15 @@ function App() {
           ) : (
             <Route
               path="/product"
-              element={<ProductCard products={products} currentPage={currentPage} totalPages={totalPages}  totalProducts={totalProducts}  />}
+              element={
+                <ProductCard
+                  products={products}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalProducts={totalProducts}
+                  setCurrentPage={setCurrentPage}
+                />
+              }
             />
           )}
           <Route path="/search" element={<SearchProducts />} />

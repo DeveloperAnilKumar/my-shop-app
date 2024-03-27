@@ -2,17 +2,27 @@ import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { addToCart, removeCartItems } from "../Redux/slice/CartSlice.jsx";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
+import {
+  getAllProductsData,
+  setCurrentPage,
+} from "../Redux/slice/ProductSlice.jsx";
+import { useEffect } from "react";
 
-export default function ProductCard({ products }) {
+export default function ProductCard({
+  products,
+  currentPage,
+  totalPages,
+  totalProducts,
+}) {
   const dispatch = useDispatch();
 
   const { cartItems } = useSelector((state) => state.cart);
   const { isLogin } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
-
+  const location = useLocation();
   async function addToCartHandler(e, cartItem) {
     if (isLogin) {
       const res = await dispatch(addToCart(cartItem));
@@ -24,12 +34,21 @@ export default function ProductCard({ products }) {
     }
   }
 
+  const isPage = location.pathname.includes("/product");
+
   async function removeToCartHandler(e, id) {
     const res = await dispatch(removeCartItems());
     if (res.payload?.success === true) {
       toast.success("product remove successfully");
     }
   }
+  useEffect(() => {
+    dispatch(getAllProductsData(currentPage));
+  }, [dispatch, currentPage]);
+
+  const handlePageChange = (event, newPage) => {
+    dispatch(setCurrentPage(newPage));
+  };
 
   return (
     <>
@@ -151,6 +170,18 @@ export default function ProductCard({ products }) {
             })}
           </div>
         </div>
+      </div>
+
+      <div className="flex  ">
+        {isPage && (
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            className="mx-auto my-4"
+            color="primary"
+          />
+        )}
       </div>
     </>
   );

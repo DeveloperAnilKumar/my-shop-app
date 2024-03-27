@@ -6,11 +6,18 @@ import { Button, Select, MenuItem } from "@mui/material";
 
 function ReceivedOrders() {
   const [orders, setOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Adjust as per your requirement
 
   const getAllOrders = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/order/all");
-      setOrders(res.data.order);
+      const res = await axios.get(BASE_URL + "/order/all", {
+        params: {
+          page: currentPage,
+          limit: itemsPerPage,
+        },
+      });
+      setOrders(res.data.orders);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -18,7 +25,7 @@ function ReceivedOrders() {
 
   useEffect(() => {
     getAllOrders();
-  }, []);
+  }, [currentPage]);
 
   const updateDeliveryStatus = async (orderId, newStatus) => {
     try {
@@ -31,11 +38,15 @@ function ReceivedOrders() {
     }
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="container mx-auto p-6">
       <div className="grid gap-6">
         {orders.map((item) => (
-          <div key={item._id} className="shadow-lg p-6 bg-white">
+          <div key={item?._id} className="shadow-lg p-6 bg-white">
             <div className="flex justify-between items-center mb-4">
               <div>
                 <h1 className="text-xl font-bold">Order ID: {item._id}</h1>
@@ -64,30 +75,32 @@ function ReceivedOrders() {
                     Size: {p.size}, Color: {p.color}
                   </p>
                   <p className="text-lg font-bold">Amount: ₹{p.price}</p>
-                  <div className="mt-2">
+                  <div className="mt-2 flex justify-between">
                     <Button
                       variant="contained"
                       size="small"
                       component={Link}
                       to={`/order/${item._id}`}
+                      fullWidth
                     >
                       View Order
                     </Button>
 
                     <Select
-                      variant="outlined"
+                      variant="standard"
                       size="small"
                       value={item.deliveryStatus}
                       onChange={(e) =>
                         updateDeliveryStatus(item._id, e.target.value)
                       }
                       className="ml-2"
+                      fullWidth
                     >
                       {item.deliveryStatus === "orderConform" &&
                         ["shipped", "outOfDelivery", "delivered"].map(
                           (option) => (
                             <MenuItem key={option} value={option}>
-                              {option}
+                              <p className="capitalize">{option} </p>
                             </MenuItem>
                           )
                         )}
@@ -119,6 +132,24 @@ function ReceivedOrders() {
             ))}
           </div>
         ))}
+      </div>
+
+      <div className="mt-6 flex justify-center">
+        <Button
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-2 hover:bg-gray-300"
+        >
+          Previous
+        </Button>
+        <span className="text-lg font-semibold">{currentPage}</span>
+        <Button
+          disabled={orders.length < itemsPerPage}
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md ml-2 hover:bg-gray-300"
+        >
+          Next
+        </Button>
       </div>
     </div>
   );

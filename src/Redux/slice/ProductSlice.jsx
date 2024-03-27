@@ -5,9 +5,9 @@ import { BASE_URL } from "../../component/data.jsx";
 
 export const getAllProductsData = createAsyncThunk(
   "/get-all-products",
-  async () => {
+  async (page) => {
     try {
-      const res = await axios.get(BASE_URL + "/product");
+      const res = await axios.get(BASE_URL + `/product?page=${page}`);
       return await res.data;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -27,6 +27,7 @@ export const ProductSlice = createSlice({
   reducers: {
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
+     
     },
   },
   extraReducers: (builder) => {
