@@ -12,17 +12,21 @@ function CategoryByProducts() {
   const [product, setProduct] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   async function getProductsByCategory(page) {
     try {
-      const res = await axios.get(
-        BASE_URL + `/product/category/${id}?page=${page}`
+      const { data } = await axios.get(
+        `${BASE_URL}/product/category/${id}?page=${page}`
       );
-      setProduct(res.data.products);
-      setCurrentPage(res.data.currentPage);
-      setTotalPages(res.data.totalPages);
+      setProduct(data.products);
+      setCurrentPage(data.currentPage);
+      setTotalPages(data.totalPages);
+      setLoading(false);
     } catch (error) {
-      console.error("Error fetching products by category:", error);
+      setError("Error fetching products by category");
+      setLoading(false);
     }
   }
 
@@ -36,7 +40,17 @@ function CategoryByProducts() {
 
   return (
     <div>
-      {product && product.length > 0 ? (
+      {loading ? (
+        <Spinner />
+      ) : error ? (
+        <div className="flex justify-center items-center h-screen w-screen text-5xl capitalize">
+          {error}
+        </div>
+      ) : product.length === 0 ? (
+        <div className="flex justify-center items-center h-screen w-screen text-5xl capitalize">
+          No data found
+        </div>
+      ) : (
         <>
           <ProductCard
             products={product}
@@ -52,14 +66,6 @@ function CategoryByProducts() {
             />
           </div>
         </>
-      ) : !product.length === 0 ? (
-        <div className="flex justify-center items-center h-screen w-screen text-5xl capitalize">
-          no data found
-        </div>
-      ) : (
-        <div>
-          <Spinner />
-        </div>
       )}
     </div>
   );
