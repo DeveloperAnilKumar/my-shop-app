@@ -40,7 +40,7 @@ function Dashboard() {
   };
   const getAllOrders = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/order/all");
+      const res = await axios.get(BASE_URL + "/order/received/orders");
       setOrders(res.data.orders);
     } catch (error) {
       console.error("Error fetching orders:", error);

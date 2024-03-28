@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../../component/data";
-import { Button, Select, MenuItem } from "@mui/material";
+import { Button, Select, MenuItem, CircularProgress } from "@mui/material";
 
 function ReceivedOrders() {
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Adjust as per your requirement
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const itemsPerPage = 10;
 
   const getAllOrders = async () => {
+    setLoading(true);
     try {
-      const res = await axios.get(BASE_URL + "/order/all", {
+      const res = await axios.get(BASE_URL + "/order/received/orders", {
         params: {
           page: currentPage,
           limit: itemsPerPage,
@@ -19,7 +22,9 @@ function ReceivedOrders() {
       });
       setOrders(res.data.orders);
     } catch (error) {
-      console.error("Error fetching orders:", error);
+      setError("Error fetching orders. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,6 +40,7 @@ function ReceivedOrders() {
       getAllOrders();
     } catch (error) {
       console.error("Error updating delivery status:", error);
+      setError("Error updating delivery status. Please try again later.");
     }
   };
 
@@ -43,114 +49,104 @@ function ReceivedOrders() {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="grid gap-6">
-        {orders.map((item) => (
-          <div key={item?._id} className="shadow-lg p-6 bg-white">
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <h1 className="text-xl font-bold">Order ID: {item._id}</h1>
-                <p className="text-sm text-gray-500">
-                  Order Date:{" "}
-                  {new Date(item.orderDate).toLocaleDateString("en-GB")}
-                </p>
-              </div>
-              <div>
-                <p className="text-lg font-bold">
-                  Total Amount: ₹{item.totalAmount}
-                </p>
-                <p className="text-sm text-gray-500">Status: {item.status}</p>
-              </div>
+    <div className="container mx-auto ">
+      {loading && <CircularProgress className="mx-auto" />}
+      {error && <div className="text-red-500 text-center">{error}</div>}
+      {!loading && !error && (
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+          <div className="border shadow-sm rounded-lg p-2">
+            <div className="relative w-full overflow-auto">
+              <table className="w-full caption-bottom text-sm">
+                <thead className="[&amp;_tr]:border-b">
+                  <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 w-[100px]">
+                      S.No
+                    </th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 w-[100px]">
+                      Order
+                    </th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 min-w-[150px]">
+                      Customer
+                    </th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 hidden md:table-cell">
+                      Channel
+                    </th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 hidden md:table-cell">
+                      Date
+                    </th>
+                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 text-right">
+                      Total
+                    </th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 hidden sm:table-cell">
+                      Status
+                    </th>
+                    <th className="h-12 px-4 align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 text-right">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="[&amp;_tr:last-child]:border-0">
+                  {orders.map((item, index) => (
+                    <tr
+                      key={item?._id}
+                      className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                    >
+                      <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 font-medium">
+                        {index + 1}
+                      </td>
+                      <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 font-medium">
+                        {item._id}
+                      </td>
+                      <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 capitalize">
+                        {item.user.firstName} {item.user.lastName}
+                      </td>
+                      <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 hidden md:table-cell capitalize">
+                        {item.paymentMethod}
+                      </td>
+                      <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 hidden md:table-cell">
+                        {new Date(item.orderDate).toLocaleDateString("en-GB")}
+                      </td>
+                      <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 text-right">
+                        ₹{item.totalAmount}
+                      </td>
+                      <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 hidden sm:table-cell">
+                        {item.status}
+                      </td>
+                      <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 text-right">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          component={Link}
+                          to={`/order/${item._id}`}
+                        >
+                          View
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            {item.items.map((p) => (
-              <div key={p._id} className="flex items-start gap-4">
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  className="w-24 h-24 object-cover rounded-md"
-                />
-                <div>
-                  <h2 className="text-lg font-semibold">{p.name}</h2>
-                  <p className="text-sm text-gray-500">
-                    Size: {p.size}, Color: {p.color}
-                  </p>
-                  <p className="text-lg font-bold">Amount: ₹{p.price}</p>
-                  <div className="mt-2 flex justify-between">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      component={Link}
-                      to={`/order/${item._id}`}
-                      fullWidth
-                    >
-                      View Order
-                    </Button>
-
-                    <Select
-                      variant="standard"
-                      size="small"
-                      value={item.deliveryStatus}
-                      onChange={(e) =>
-                        updateDeliveryStatus(item._id, e.target.value)
-                      }
-                      className="ml-2"
-                      fullWidth
-                    >
-                      {item.deliveryStatus === "orderConform" &&
-                        ["shipped", "outOfDelivery", "delivered"].map(
-                          (option) => (
-                            <MenuItem key={option} value={option}>
-                              <p className="capitalize">{option} </p>
-                            </MenuItem>
-                          )
-                        )}
-
-                      {item.deliveryStatus === "shipped" &&
-                        ["outOfDelivery", "delivered"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-
-                      {item.deliveryStatus === "outOfDelivery" &&
-                        ["delivered"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-
-                      {item.deliveryStatus === "delivered" &&
-                        ["delivered"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
-        ))}
-      </div>
-
-      <div className="mt-6 flex justify-center">
-        <Button
-          disabled={currentPage === 1}
-          onClick={() => handlePageChange(currentPage - 1)}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-2 hover:bg-gray-300"
-        >
-          Previous
-        </Button>
-        <span className="text-lg font-semibold">{currentPage}</span>
-        <Button
-          disabled={orders.length < itemsPerPage}
-          onClick={() => handlePageChange(currentPage + 1)}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md ml-2 hover:bg-gray-300"
-        >
-          Next
-        </Button>
-      </div>
+          <div className="mt-6 flex justify-center">
+            <Button
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-2 hover:bg-gray-300"
+            >
+              Previous
+            </Button>
+            <span className="text-lg font-semibold">{currentPage}</span>
+            <Button
+              disabled={orders.length < itemsPerPage}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md ml-2 hover:bg-gray-300"
+            >
+              Next
+            </Button>
+          </div>
+        </main>
+      )}
     </div>
   );
 }
