@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { FaTruck, FaMoneyBillWave, FaCreditCard } from "react-icons/fa";
 
 export default function Home({ category }) {
   const [product, setProduct] = useState([]);
@@ -57,7 +58,6 @@ export default function Home({ category }) {
     getMenProducts();
     getWomanProduct();
     getKidProduct();
-  
   }, []);
   return (
     <div>
@@ -166,7 +166,7 @@ export default function Home({ category }) {
         </div>
       </div>
 
-      <div className=" m-1 bg-gradient-to-r from-purple-600 to-blue-600 font-[sans-serif] p-6">
+      <div className=" m-1 bg-gradient-to-r from-purple-600 to-blue-600 font-[sans-serif] p-6 ">
         <div className="container mx-auto flex flex-col justify-center items-center">
           <h2 className="text-white text-3xl font-bold mb-4">
             Discover Our New Collection
@@ -181,6 +181,54 @@ export default function Home({ category }) {
           >
             Shop Now
           </Link>
+        </div>
+      </div>
+
+      <div className="flex justify-center items-center mt-4 p-10">
+        {/* Free Delivery Option */}
+        <div className="flex items-center mr-8 cursor-pointer">
+          <div className="bg-green-500 rounded-full p-2">
+            <FaTruck className="text-white" />
+          </div>
+          <label
+            htmlFor="freeDelivery"
+            className="ml-2 text-gray-800 font-semibold"
+          >
+            Free Delivery
+          </label>
+          <span className="text-sm ml-2 text-gray-500">
+            Arrives in 2-3 business days
+          </span>
+        </div>
+
+        {/* Cash on Delivery Option */}
+        <div className="flex items-center mr-8 cursor-pointer">
+          <div className="bg-blue-500 rounded-full p-2">
+            <FaMoneyBillWave className="text-white" />
+          </div>
+          <label
+            htmlFor="cashOnDelivery"
+            className="ml-2 text-gray-800 font-semibold"
+          >
+            Cash on Delivery
+          </label>
+          <span className="text-sm ml-2 text-gray-500">Pay upon delivery</span>
+        </div>
+
+        {/* Online Payment Option */}
+        <div className="flex items-center cursor-pointer">
+          <div className="bg-purple-500 rounded-full p-2">
+            <FaCreditCard className="text-white" />
+          </div>
+          <label
+            htmlFor="onlinePayment"
+            className="ml-2 text-gray-800 font-semibold"
+          >
+            Online Payment
+          </label>
+          <span className="text-sm ml-2 text-gray-500">
+            Secure online payment
+          </span>
         </div>
       </div>
 

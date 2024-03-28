@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Typography,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-} from "@mui/material";
+import { Typography, Divider, List, ListItem, ListItemText, ListItemIcon } from "@mui/material";
 import { Link } from "react-router-dom";
 import { BiCategory, BiPlus, BiShow } from "react-icons/bi";
 import { BsViewList } from "react-icons/bs";
@@ -52,7 +45,6 @@ export default function Sidebar() {
           </ListItemIcon>
           <ListItemText primary="View Categories" />
         </ListItem>
-
         <ListItem
           button
           component={Link}
@@ -64,7 +56,6 @@ export default function Sidebar() {
           </ListItemIcon>
           <ListItemText primary="Orders" />
         </ListItem>
-
       </List>
       <Divider />
     </div>

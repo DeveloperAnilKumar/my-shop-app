@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { removeAllCartItems } from "../Redux/slice/CartSlice";
 import toast from "react-hot-toast";
 import { Spinner } from "./Spinner";
-
+import Alert from "@mui/material/Alert";
+import { BiMoney, BiCreditCard } from "react-icons/bi";
 function CheckOut() {
   const [address, setAddress] = useState({
     firstName: "",
@@ -21,8 +22,9 @@ function CheckOut() {
 
   const { cartItems } = useSelector((state) => state.cart);
 
-  const [paymentMethod, setPaymentMethod] = useState("case");
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -45,8 +47,39 @@ function CheckOut() {
     });
   }
 
+  function validateForm() {
+    let valid = true;
+    const newErrors = {};
+
+    Object.keys(address).forEach((key) => {
+      if (!address[key]) {
+        newErrors[key] = "This field is required";
+        valid = false;
+      }
+    });
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (address.email && !emailRegex.test(address.email)) {
+      newErrors.email = "Invalid email address";
+      valid = false;
+    }
+
+    if (!paymentMethod) {
+      newErrors.paymentMethod = "Please select a payment method";
+      valid = false;
+    }
+    setErrors(newErrors);
+    return valid;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("All Fields required");
+      return;
+    }
 
     const orderItems = cartItems.map((item) => item.product);
 
@@ -82,8 +115,6 @@ function CheckOut() {
           Authorization: `Bearer ${user.token}`,
         },
       });
-
-      console.log(paymentResponse);
 
       var options = {
         key: "rzp_test_8gm05gh8gaDVho",
@@ -151,7 +182,6 @@ function CheckOut() {
 
       console.log(id);
 
-      console.log(user);
       const res = await axios.put(
         BASE_URL + `/order/${id}`,
         {},
@@ -161,7 +191,6 @@ function CheckOut() {
           },
         }
       );
-      console.log(res);
 
       if (res.data.success === true) {
         toast.success("Order successfully placed!");
@@ -285,6 +314,7 @@ function CheckOut() {
                           ></path>
                         </svg>
                       </div>
+
                       <div className="relative flex items-center">
                         <input
                           type="text"
@@ -435,6 +465,18 @@ function CheckOut() {
                             className="ml-4 flex gap-2 cursor-pointer"
                           >
                             <span className="text-2xl uppercase"> Cash </span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-6 h-6 text-green-500"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M6.293 8.293a1 1 0 0 0 1.414 1.414L10 9.414l2.293 2.293a1 1 0 1 0 1.414-1.414L11.414 8l2.293-2.293a1 1 0 1 0-1.414-1.414L10 6.586 7.707 4.293a1 1 0 0 0-1.414 1.414L8.586 8 6.293 10.293a1 1 0 1 0 1.414 1.414L10 9.414l2.293 2.293a1 1 0 1 0 1.414-1.414L11.414 8l2.293-2.293a1 1 0 1 0-1.414-1.414L10 6.586 7.707 4.293a1 1 0 0 0-1.414 1.414L8.586 8z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
                           </label>
                         </div>
 
@@ -445,32 +487,40 @@ function CheckOut() {
                             checked={paymentMethod === "online"}
                             onChange={() => setPaymentMethod("online")}
                             className="w-5 h-5 cursor-pointer"
-                            id="paypal"
+                            id="online"
                           />
                           <label
-                            htmlFor="paypal"
+                            htmlFor="online"
                             className="ml-4 flex gap-2 cursor-pointer"
                           >
-                            <span className="text-2xl uppercase"> online </span>
+                            <span className="text-2xl uppercase">
+                              {" "}
+                              Online Payment{" "}
+                            </span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-6 h-6 text-green-500"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M6.293 8.293a1 1 0 0 0 1.414 1.414L10 9.414l2.293 2.293a1 1 0 1 0 1.414-1.414L11.414 8l2.293-2.293a1 1 0 1 0-1.414-1.414L10 6.586 7.707 4.293a1 1 0 0 0-1.414 1.414L8.586 8 6.293 10.293a1 1 0 1 0 1.414 1.414L10 9.414l2.293 2.293a1 1 0 1 0 1.414-1.414L11.414 8l2.293-2.293a1 1 0 1 0-1.414-1.414L10 6.586 7.707 4.293a1 1 0 0 0-1.414 1.414L8.586 8z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
                           </label>
                         </div>
                       </div>
+                      {errors.paymentMethod && (
+                        <Alert severity="error">{errors.paymentMethod}</Alert>
+                      )}
                     </div>
-
-                    <div className="flex gap-6 max-sm:flex-col mt-10">
-                      <button
-                        type="reset"
-                        className="rounded-md px-6 py-3 w-full text-sm font-semibold bg-transparent hover:bg-gray-100 border-2 text-[#333]"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="rounded-md px-6 py-3 w-full text-sm font-semibold bg-[#333] text-white hover:bg-[#222]"
-                      >
-                        Complete Purchase
-                      </button>
-                    </div>
+                  </div>
+                  <div className="mt-8">
+                    <button className="w-full bg-[#333] text-white px-6 py-3 rounded-md text-lg font-semibold">
+                      Place Order
+                    </button>
                   </div>
                 </form>
               </div>

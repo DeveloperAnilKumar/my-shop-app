@@ -218,10 +218,13 @@ export default function Navbar() {
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
                   {isLogin && (
+                    <Link to="/profile">
+                  
                     <MenuItem onClick={handleClose}>
                       <Avatar src={user.image} />
                       Profile
                     </MenuItem>
+                    </Link>
                   )}
 
                   <Divider />

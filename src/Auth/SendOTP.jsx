@@ -1,10 +1,11 @@
-import {Button, Divider, TextField} from "@mui/material";
+import {Button, Divider, TextField ,CircularProgress} from "@mui/material";
 import {BiSend} from "react-icons/bi";
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import toast from "react-hot-toast";
 import {sendOTP} from "../Redux/slice/AuthSlice.jsx";
 import {Link, useNavigate} from "react-router-dom";
+
 
 export default function SendOTP() {
 
@@ -49,7 +50,7 @@ export default function SendOTP() {
 
                     <div className="text-center mx-auto mb-3">
                         {
-                            isLoading ? <div className="loader"></div> : ""
+                            isLoading ? <div> <CircularProgress/></div> : ""
                         }
                     </div>
 

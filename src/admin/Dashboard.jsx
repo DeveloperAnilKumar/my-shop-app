@@ -16,7 +16,6 @@ import { BiRupee } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../component/data";
-
 function Dashboard() {
   const recentProducts = [
     { id: 1, name: "Product 1" },
@@ -48,7 +47,6 @@ function Dashboard() {
     }
   };
 
- 
   useEffect(() => {
     getUserCount();
     getAllOrders();
