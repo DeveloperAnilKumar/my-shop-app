@@ -21,7 +21,7 @@ export default function Home({ category }) {
   async function getWomanProduct() {
     try {
       const res = await axios.get(
-        BASE_URL + "/product/category/6600fc9940dfd2db2cb0fadb"
+        BASE_URL + "/product/woman/6600fc9940dfd2db2cb0fadb"
       );
       setWomanProduct(res.data.products.slice(0, 6));
     } catch (error) {
@@ -32,7 +32,7 @@ export default function Home({ category }) {
   async function getKidProduct() {
     try {
       const res = await axios.get(
-        BASE_URL + "/product/category/6600fca340dfd2db2cb0fadd"
+        BASE_URL + "/product/kid/6600fca340dfd2db2cb0fadd"
       );
       setKidProduct(res.data.products.slice(0, 6));
     } catch (error) {
@@ -43,7 +43,7 @@ export default function Home({ category }) {
   async function getMenProducts() {
     try {
       const res = await axios.get(
-        BASE_URL + "/product/category/6600fc7540dfd2db2cb0fad9"
+        BASE_URL + "/product/man/6600fc7540dfd2db2cb0fad9"
       );
       setProduct(res.data.products.slice(0, 6));
     } catch (error) {
