@@ -37,6 +37,7 @@ import AdminNavBar from "./admin/AdminNavBar.jsx";
 import Profile from "./component/Profile.jsx";
 import Footer from "./component/Footer.jsx";
 import NotFound from "./component/NotFound.jsx";
+import OrderDetail from "./admin/product/OrderDetail.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -136,6 +137,7 @@ function App() {
               <Route path="edit/category/:id" element={<EditCategory />} />
               <Route path="view/category" element={<ViewCategory />} />
               <Route path="orders" element={<ReceivedOrders />} />
+              <Route path="orders/:id" element={<OrderDetail />} />
             </Route>
           ) : (
             <Route path="/" element={<Home />}></Route>

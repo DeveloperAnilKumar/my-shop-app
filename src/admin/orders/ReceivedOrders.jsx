@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../component/data";
 import { Button, Select, MenuItem, CircularProgress } from "@mui/material";
 
@@ -10,6 +10,8 @@ function ReceivedOrders() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const itemsPerPage = 10;
+
+  const navigate = useNavigate();
 
   const getAllOrders = async () => {
     setLoading(true);
@@ -32,17 +34,7 @@ function ReceivedOrders() {
     getAllOrders();
   }, [currentPage]);
 
-  const updateDeliveryStatus = async (orderId, newStatus) => {
-    try {
-      await axios.put(`${BASE_URL}/order/updateStatus/${orderId}`, {
-        status: newStatus,
-      });
-      getAllOrders();
-    } catch (error) {
-      console.error("Error updating delivery status:", error);
-      setError("Error updating delivery status. Please try again later.");
-    }
-  };
+  
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -116,8 +108,9 @@ function ReceivedOrders() {
                         <Button
                           variant="contained"
                           size="small"
-                          component={Link}
-                          to={`/order/${item._id}`}
+                          onClick={() => {
+                            navigate(`/dashboard/orders/${item._id}`);
+                          }}
                         >
                           View
                         </Button>
