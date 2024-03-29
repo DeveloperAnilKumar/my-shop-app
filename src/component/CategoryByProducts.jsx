@@ -23,10 +23,10 @@ function CategoryByProducts() {
       setProduct(data.products);
       setCurrentPage(data.currentPage);
       setTotalPages(data.totalPages);
-      setLoading(false);
     } catch (error) {
       setError("Error fetching products by category");
-      setLoading(false);
+    } finally {
+      setLoading(false); 
     }
   }
 

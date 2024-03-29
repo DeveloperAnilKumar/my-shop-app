@@ -35,11 +35,11 @@ export const removeCartItems = createAsyncThunk("/remove-cart", async () => {
   }
 });
 
-export const getAllCartItems = createAsyncThunk("/cart-items", async () => {
+export const getAllCartItems = createAsyncThunk("/cart-items", async (id) => {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const res = await axios.get(BASE_URL + "/cart", {
+    const res = await axios.get(BASE_URL + "/cart/"+id, {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },

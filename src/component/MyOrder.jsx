@@ -14,15 +14,18 @@ function MyOrder() {
   const [totalPages, setTotalPages] = useState(1);
 
   const getAllOrders = async (page) => {
-      const user = JSON.parse(localStorage.getItem("user"))
+    const user = JSON.parse(localStorage.getItem("user"));
     try {
-      const res = await axios.get(BASE_URL + `/order/all/${user._id}?page=${page}`);
+      const res = await axios.get(
+        BASE_URL + `/order/all/${user._id}?page=${page}`
+      );
       setOrders(res.data.orders);
       setCurrentPage(res.data.currentPage);
       setTotalPages(res.data.totalPages);
-      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching orders:", error);
+    } finally {
+      setIsLoading(false); 
     }
   };
 

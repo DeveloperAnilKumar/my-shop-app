@@ -9,55 +9,15 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { FaTruck, FaMoneyBillWave, FaCreditCard } from "react-icons/fa";
 
-export default function Home({ category }) {
-  const [product, setProduct] = useState([]);
-  const [womanProduct, setWomanProduct] = useState([]);
-  const [kisProduct, setKidProduct] = useState([]);
-
-  const { products, currentPage, totalPages, totalProducts } = useSelector(
-    (state) => state.product
-  );
-
-  async function getWomanProduct() {
-    try {
-      const res = await axios.get(
-        BASE_URL + "/product/woman/6600fc9940dfd2db2cb0fadb"
-      );
-      setWomanProduct(res.data.products.slice(0, 6));
-    } catch (error) {
-      console.error("Error fetching products by category:", error);
-    }
-  }
-
-  async function getKidProduct() {
-    try {
-      const res = await axios.get(
-        BASE_URL + "/product/kid/6600fca340dfd2db2cb0fadd"
-      );
-      setKidProduct(res.data.products.slice(0, 6));
-    } catch (error) {
-      console.error("Error fetching products by category:", error);
-    }
-  }
-
-  async function getMenProducts() {
-    try {
-      const res = await axios.get(
-        BASE_URL + "/product/man/6600fc7540dfd2db2cb0fad9"
-      );
-      setProduct(res.data.products.slice(0, 6));
-    } catch (error) {
-      console.error("Error fetching products by category:", error);
-    }
-  }
-
+export default function Home({
+  category,
+  menProducts,
+  womanProduct,
+  kidsProducts,
+}) {
   useEffect(() => {
     AOS.init();
     AOS.refresh();
-
-    getMenProducts();
-    getWomanProduct();
-    getKidProduct();
   }, []);
   return (
     <div>
@@ -232,7 +192,7 @@ export default function Home({ category }) {
         </div>
       </div>
 
-      <Cards data={"fade-right"} products={product} category={"MEN'S WEAR"} />
+      <Cards data={"fade-right"} products={menProducts} category={"MEN'S WEAR"} />
 
       <Cards
         data={"fade-up-left"}
@@ -242,7 +202,7 @@ export default function Home({ category }) {
 
       <Cards
         data={"fade-right"}
-        products={kisProduct}
+        products={kidsProducts}
         category={"KID'S WEAR"}
       />
     </div>

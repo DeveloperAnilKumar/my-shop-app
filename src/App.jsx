@@ -40,16 +40,7 @@ import NotFound from "./component/NotFound.jsx";
 
 function App() {
   const dispatch = useDispatch();
-
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    dispatch(getAllProductsData());
-    dispatch(getAllCartItems());
-    dispatch(getAllCategory());
-    setLoading(false);
-  }, [dispatch]);
-
   const { products, currentPage, totalPages, totalProducts } = useSelector(
     (state) => state.product
   );
@@ -57,13 +48,51 @@ function App() {
   const { category } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.auth);
 
+  useEffect(() => {
+    dispatch(getAllProductsData());
+    dispatch(getAllCartItems(user._id));
+    dispatch(getAllCategory());
+    setLoading(false);
+  }, [dispatch, user._id]);
+
+  const menProducts =
+    category.length > 0
+      ? products
+          .filter((item) => item.category._id === category[0]._id)
+          .slice(0, 6)
+      : products.slice(0, 6);
+
+  const womenProducts =
+    category.length > 0
+      ? products
+          .filter((item) => item.category._id === category[1]._id)
+          .slice(0, 6)
+      : products.slice(0, 6);
+
+  const kidsProducts =
+    category.length > 0
+      ? products
+          .filter((item) => item.category._id === category[2]._id)
+          .slice(0, 6)
+      : products.slice(0, 6);
+
   return (
     <>
       {user.role !== "ADMIN" && <Navbar />}
 
       <div>
         <Routes>
-          <Route path="/" element={<Home category={category} />} />
+          <Route
+            path="/"
+            element={
+              <Home
+                category={category}
+                menProducts={menProducts}
+                womanProduct={womenProducts}
+                kidsProducts={kidsProducts}
+              />
+            }
+          />
           <Route path="/Otp" element={<SendOTP />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/Login" element={<LoginForm />} />
@@ -111,8 +140,7 @@ function App() {
           ) : (
             <Route path="/" element={<Home />}></Route>
           )}
-                    <Route path="/*" element={<NotFound />} />
-
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </div>
       <div>
