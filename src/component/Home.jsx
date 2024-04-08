@@ -15,10 +15,7 @@ export default function Home({
   womanProduct,
   kidsProducts,
 }) {
-  useEffect(() => {
-    AOS.init();
-    AOS.refresh();
-  }, []);
+
   return (
     <div>
       <div className="relative   font-[sans-serif] m-1 before:absolute before:w-full before:h-full before:inset-0 before:bg-black before:opacity-50 before:z-10">
@@ -44,8 +41,7 @@ export default function Home({
       </div>
 
       <div
-        data-aos="fade-left"
-        data-aos-duration="2000"
+     
         className=" bg-gray-50 px-4 py-10 font-[sans-serif]"
       >
         <div className="max-w-7xl max-md:max-w-lg mx-auto">
@@ -192,16 +188,16 @@ export default function Home({
         </div>
       </div>
 
-      <Cards data={"fade-right"} products={menProducts} category={"MEN'S WEAR"} />
+      <Cards  products={menProducts} category={"MEN'S WEAR"} />
 
       <Cards
-        data={"fade-up-left"}
+       
         products={womanProduct}
         category={"WOMEN'S WEAR"}
       />
 
       <Cards
-        data={"fade-right"}
+       
         products={kidsProducts}
         category={"KID'S WEAR"}
       />

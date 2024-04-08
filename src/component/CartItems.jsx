@@ -6,11 +6,14 @@ import {
 } from "../Redux/slice/CartSlice.jsx";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function CartItems({ item }) {
   const dispatch = useDispatch();
 
   let [count, setCount] = useState(item.quantity);
+
+  const navigate = useNavigate();
 
   async function increment() {
     setCount((prevCount) => prevCount + 1);
@@ -56,13 +59,6 @@ export default function CartItems({ item }) {
             </h3>
             <hr className="my-6" />
             <ul className="text-sm text-[#333] space-y-2 list-disc pl-4">
-              {/*<li>UK7.</li>*/}
-              {/*<li>Dutch support for extra comfort.</li>*/}
-              {/*<li>Cushioned insole with soft breathable lining.</li>*/}
-              {/*<li>Upper material is made of PU that is comfortable, lightweight, easy to*/}
-              {/*    clean.*/}
-              {/*</li>*/}
-
               <p>{item.product.description} </p>
             </ul>
             <div className="flex items-center justify-between flex-wrap gap-4 mt-6">
@@ -118,6 +114,9 @@ export default function CartItems({ item }) {
             </div>
             <div className="divide-x border-y mt-6 grid grid-cols-2 text-center">
               <button
+                onClick={() => {
+                  navigate(`/view/${item.product._id}`);
+                }}
                 type="button"
                 className="bg-transparent font-semibold py-3 text-gray-500 text-sm"
               >

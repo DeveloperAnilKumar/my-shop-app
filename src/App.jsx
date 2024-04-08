@@ -33,7 +33,6 @@ import Main from "./admin/Main.jsx";
 import Navbar from "./component/Navbar.jsx";
 import ReceivedOrders from "./admin/orders/ReceivedOrders.jsx";
 import SearchProducts from "./component/SearchProducts.jsx";
-import AdminNavBar from "./admin/AdminNavBar.jsx";
 import Profile from "./component/Profile.jsx";
 import Footer from "./component/Footer.jsx";
 import NotFound from "./component/NotFound.jsx";
@@ -51,10 +50,14 @@ function App() {
 
   useEffect(() => {
     dispatch(getAllProductsData());
-    dispatch(getAllCartItems(user._id));
     dispatch(getAllCategory());
+
+    if (user != null) {
+      dispatch(getAllCartItems(user._id));
+    }
+
     setLoading(false);
-  }, [dispatch, user._id]);
+  }, [dispatch, user]);
 
   const menProducts =
     category.length > 0

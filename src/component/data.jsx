@@ -91,7 +91,4 @@ export  const  BASE_URL="https://server-inky-beta.vercel.app/api/v1"
 
 
 
-  export  const  GetToken = ()=>{
-      const  {user} = useSelector((state)=> state.auth)
-      return user? user.token :null
-  }
+  

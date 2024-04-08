@@ -27,7 +27,6 @@ import { logout } from "../Redux/slice/AuthSlice.jsx";
 import axios from "axios";
 import { BASE_URL } from "./data.jsx";
 import SearchProducts from "./SearchProducts.jsx";
-import AdminNavBar from "../admin/AdminNavBar.jsx";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -219,11 +218,10 @@ export default function Navbar() {
                 >
                   {isLogin && (
                     <Link to="/profile">
-                  
-                    <MenuItem onClick={handleClose}>
-                      <Avatar src={user.image} />
-                      Profile
-                    </MenuItem>
+                      <MenuItem onClick={handleClose}>
+                        <Avatar src={user.image} />
+                        Profile
+                      </MenuItem>
                     </Link>
                   )}
 
@@ -334,20 +332,22 @@ export default function Navbar() {
                     <BiHeart className="text-2xl" />
                   </Typography>
                   <Typography>
-                    <Link to="/cart">
-                      {cartItems.length === 0 ? (
-                        <Badge badgeContent={"0"} color="secondary">
-                          <BsCart className="text-2xl" />{" "}
-                        </Badge>
-                      ) : (
+                    {isLogin ? (
+                      <Link to="/cart">
                         <Badge
                           badgeContent={cartItems.length}
                           color="secondary"
                         >
                           <BsCart className="text-2xl" />
                         </Badge>
-                      )}
-                    </Link>
+                      </Link>
+                    ) : (
+                      <Link to="/Login">
+                        <Badge badgeContent={"0"} color="secondary">
+                          <BsCart className="text-2xl" />{" "}
+                        </Badge>
+                      </Link>
+                    )}
                   </Typography>
                   <Tooltip title="Account settings">
                     <IconButton
